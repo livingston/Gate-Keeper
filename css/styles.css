@@ -1,0 +1,6 @@
+html, body, div, ul, ol, li, span, a, input, textarea, h1, h2, h3, h4, h5, h6, dl, dd, dt, legend, fieldset, canvas { border:0; margin:0; padding:0 }
+a, a:focus, a:active { outline:none; text-decoration:none }
+html, body { height:100%; overflow:hidden; background:#961b27; color:#fff; font:13px/1.2 Verdana, sans-serif }
+
+#wrapper { width:975px; margin:20px auto 0; text-align:center }
+.container { width:320px; margin:30px auto; border:1px solid #740905; background:#69121b; border-radius:10px }
