@@ -23,8 +23,11 @@
     </div>
     
     <button id='capture'>Capture</button>
+    <button id='detect'>Detect</button>
   </div>
   
+  <script src='js/ccv/ccv.js'></script>
+  <script src='js/ccv/face.js'></script>
   <script>
     var cam = document.getElementById("embedflash"),
         gCanvas = document.getElementById("canvas"),
@@ -34,41 +37,63 @@
         imageDataBuffer = gCtx.getImageData( 0, 0, gW, gH),
         ii=0, jj=0, c=0,
         btnCapture = document.getElementById("capture");
+        btnDetect = document.getElementById("detect");
 
-    
     function passLine(stringPixels) {
       var coll = stringPixels.split("-");
-      
+
       for(var i=0;i<320;i++) {
         var intVal = parseInt(coll[i]);
-        
+
         r = (intVal >> 16) & 0xff;
         g = (intVal >> 8) & 0xff;
         b = (intVal ) & 0xff;
-        
+
         imageData.data[c+0]=r;
         imageData.data[c+1]=g;
         imageData.data[c+2]=b;
         imageData.data[c+3]=255;
-        
+
         c+=4;
       } 
-      
+
       if(c>=320*240*4) {
         c=0;
-        
+
         gCtx.putImageData(imageData, 0,0);
       }
     };
-    
+
     btnCapture.addEventListener('click', function () {
       updateCanvas();
     }, false);
-    
+
+    btnDetect.addEventListener('click', function () {
+      detectFace();
+    }, false);
+
     var updateCanvas = function () {
       cam.ccCapture();
-      
-      setTimeout(updateCanvas, 300);
+
+      //setTimeout(updateCanvas, 300);
+    };
+
+    var detectFace = function () {
+      var image = new Image();
+      image.src = gCanvas.toDataURL();
+
+      image.onload = function () {
+        var comp = ccv.detect_objects({ "canvas" : ccv.grayscale(ccv.pre(image)),
+                                        "cascade" : cascade,
+                                        "interval" : 5,
+                                        "min_neighbors" : 1 });
+
+        gCtx.lineWidth = 3;
+        gCtx.strokeStyle = "#f00";
+
+        for (var i = 0; i < comp.length; i++)
+          gCtx.strokeRect(comp[i].x, comp[i].y, comp[i].width, comp[i].height);
+      };
     };
   </script>
 </body>
