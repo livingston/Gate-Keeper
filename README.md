@@ -1,4 +1,4 @@
-﻿#### Gate Keeper _(alpha)_
+﻿**Gate Keeper** _(alpha)_
 
 Web-based user authentication with facial recognition.
 
